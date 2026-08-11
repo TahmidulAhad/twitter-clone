@@ -1,14 +1,12 @@
-﻿namespace TwitterClone.Domain
+namespace TwitterClone.Domain
 {
-    public class Tweet
+    public class Tweet : BaseEntity
     {
-        public Guid Id { get; private set; }
         public Guid AuthorId { get; private set; }
-        public string Content {  get; private set; }
+        public string Content { get; private set; } = string.Empty;
 
-        public Tweet(Guid authorId, string content)
+        public Tweet(Guid authorId, string content) : base(Guid.NewGuid())
         {
-            Id = Guid.NewGuid();
             AuthorId = authorId;
             SetContent(content);
         }
@@ -21,6 +19,11 @@
                 throw new ArgumentException("Tweet cannot exceed 280 characters.");
 
             Content = content;
+        }
+        public override string DescribeRecord()
+        {
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, AuthorId: {AuthorId}, Content: {Content}";
         }
     }
 

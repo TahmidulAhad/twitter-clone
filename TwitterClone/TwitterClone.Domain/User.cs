@@ -1,16 +1,21 @@
 ﻿namespace TwitterClone.Domain
 {
-    public class User
+    public class User : BaseEntity
     {
-        public Guid Id { get; private set; }
-        public string UserName { get; private set; }
+        public User(string firstName, string lastName, string email) : base(Guid.NewGuid())
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+        }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
         public string Email { get; private set; }
 
-        public User(string userName, string email)
+        public override string DescribeRecord()
         {
-            Id = Guid.NewGuid();
-            UserName = userName;
-            Email = email;
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, FirstName: {FirstName}, LastName: {LastName}, Email: {Email}";
         }
     }
 }

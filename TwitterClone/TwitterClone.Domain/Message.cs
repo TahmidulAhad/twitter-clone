@@ -1,25 +1,21 @@
 ﻿namespace TwitterClone.Domain
 {
-    public class Message
+    public class Message : BaseEntity
     {
-        public Guid Id { get; private set; }
         public Guid SenderId { get; private set; }
         public Guid ReceiverId { get; private set; }
         public string Content { get; private set; }
-        public DateTime SentAt { get; private set; }
+        public bool IsRead { get; private set; }
 
-        public Message(Guid senderId, Guid receiverId, string content)
+        public Message(Guid senderId, Guid receiverId, string content) : base(Guid.NewGuid())
         {
             if (senderId == receiverId)
                 throw new ArgumentException("Sender and receiver cannot be the same.");
 
-            Id = Guid.NewGuid();
             SenderId = senderId;
             ReceiverId = receiverId;
-
             SetContent(content);
-
-            SentAt = DateTime.UtcNow;
+            IsRead = false;
         }
 
         public void SetContent(string content)
@@ -28,6 +24,12 @@
                 throw new ArgumentException("Message cannot be empty.");
 
             Content = content;
+        }
+
+        public override string DescribeRecord()
+        {
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, SenderId: {SenderId}, ReceiverId: {ReceiverId}, Content: {Content}, IsRead: {IsRead}";
         }
     }
 }

@@ -1,21 +1,23 @@
 ﻿namespace TwitterClone.Domain
 {
-    public class Follow
+    public class Follow : BaseEntity
     {
-        public Guid Id { get; private set; }
         public Guid FollowerId { get; private set; }
         public Guid FollowingId { get; private set; }
-        public DateTime FollowedAt { get; private set; }
 
-        public Follow(Guid followerId, Guid followingId)
+        public Follow(Guid followerId, Guid followingId) : base(Guid.NewGuid())
         {
             if (followerId == followingId)
                 throw new ArgumentException("A user cannot follow themselves.");
 
-            Id = Guid.NewGuid();
             FollowerId = followerId;
             FollowingId = followingId;
-            FollowedAt = DateTime.UtcNow;
+        }
+
+        public override string DescribeRecord()
+        {
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, FollowerId: {FollowerId}, FollowingId: {FollowingId}";
         }
     }
 }
