@@ -1,5 +1,5 @@
 using System;
-using TwitterClone.Domain;
+using TwitterClone.Domain.Entities;
 
 namespace TwitterClone.Test
 {

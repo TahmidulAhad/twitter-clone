@@ -1,4 +1,4 @@
-﻿namespace TwitterClone.Domain
+﻿namespace TwitterClone.Domain.Entities
 {
     public sealed class SystemNotification : Notification
     {
@@ -10,5 +10,6 @@
         {
             return base.DescribeRecord();
         }
+
     }
 }

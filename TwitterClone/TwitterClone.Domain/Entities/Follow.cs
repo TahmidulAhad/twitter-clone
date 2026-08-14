@@ -1,4 +1,4 @@
-﻿namespace TwitterClone.Domain
+﻿namespace TwitterClone.Domain.Entities
 {
     public class Follow : BaseEntity
     {
