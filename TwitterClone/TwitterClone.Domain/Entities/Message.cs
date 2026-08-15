@@ -25,7 +25,10 @@
 
             Content = content;
         }
-
+        public void MarkAsRead()
+        {
+            IsRead = true;
+        }
         public override string DescribeRecord()
         {
             var baseRecord = base.DescribeRecord();

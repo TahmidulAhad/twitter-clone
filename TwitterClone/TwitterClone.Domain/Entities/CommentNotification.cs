@@ -5,7 +5,7 @@
         public Guid CommenterId { get; private set; }
         public Guid TweetId { get; private set; }
 
-        public CommentNotification(Guid userId, Guid commenterId, Guid tweetId) : base(userId, "Comment")
+        public CommentNotification(Guid commenterId, Guid tweetId) : base("Comment")
         {
             if (commenterId == Guid.Empty)
                 throw new ArgumentException("CommenterId cannot be empty.", nameof(commenterId));

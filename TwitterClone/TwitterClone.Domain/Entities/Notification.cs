@@ -3,15 +3,13 @@
     public class Notification : BaseEntity
     {
         public Guid UserId { get; private set; }
-        public string Message { get; private set; }
+        public string? Type { get; private set; }
+        public string? Message { get; protected set; }
         public bool IsRead { get; private set; }
 
-        public Notification(Guid userId, string message) : base(Guid.NewGuid())
+        public Notification(string notificationType) : base(Guid.NewGuid())
         {
-            if (string.IsNullOrWhiteSpace(message))
-                throw new ArgumentException("Notification message cannot be empty.");
-            UserId = userId;
-            Message = message;
+            Type = notificationType;
             IsRead = false;
         }
 

@@ -2,7 +2,7 @@
 {
     public sealed class LikeNotification : Notification
     {
-        public LikeNotification(Guid userId, Guid likerId, Guid tweetId) : base(userId, "Like")
+        public LikeNotification(Guid likerId, Guid tweetId) : base("Like")
         {
             if (likerId == Guid.Empty)
                 throw new ArgumentException("LikerId cannot be empty.");
