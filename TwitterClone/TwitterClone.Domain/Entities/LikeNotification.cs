@@ -18,5 +18,10 @@
         {
             return $"{base.DescribeRecord()}, LikerId: {LikerId}, TweetId: {TweetId}";
         }
+
+        public override string GetMessage()
+        {
+            return $"User with ID {LikerId} liked your tweet with ID {TweetId}.";
+        }
     }
 }

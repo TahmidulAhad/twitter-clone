@@ -10,6 +10,10 @@
         {
             return base.DescribeRecord();
         }
+        public override string GetMessage()
+        {
+            return "This is a system notification.";
+        }
 
     }
 }
