@@ -1,4 +1,3 @@
-using System;
 using TwitterClone.Domain.Entities;
 
 namespace TwitterClone.Test
@@ -12,7 +11,7 @@ namespace TwitterClone.Test
 
             try
             {
-              
+
                 var user1 = new User("ahad", "ahad@gmail.com", "password123");
                 var user2 = new User("rahman", "rahman@gmail.com", "password123");
 

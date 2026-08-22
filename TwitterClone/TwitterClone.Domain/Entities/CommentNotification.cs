@@ -21,5 +21,10 @@
         {
             return $"{base.DescribeRecord()}, CommenterId: {CommenterId}, TweetId: {TweetId}";
         }
+
+        public override string GetMessage()
+        {
+            return $"User with ID {CommenterId} commented on your tweet with ID {TweetId}.";
+        }
     }
 }
