@@ -1,30 +1,48 @@
 namespace TwitterClone.Domain.Entities
 {
-    public class Tweet : BaseEntity
+    public class Tweet : BaseEntity, ILikable
     {
-        public Guid AuthorId { get; private set; }
+        public Guid UserId { get; private set; }
         public string Content { get; private set; } = string.Empty;
+        public static int MaxContentLength = 200;
 
-        public Tweet(Guid authorId, string content) : base(Guid.NewGuid())
+        public Tweet(Guid userId, string content) : base(Guid.NewGuid())
         {
-            AuthorId = authorId;
+            UserId = userId;
             SetContent(content);
         }
 
-        private void SetContent(string content)
+        public Tweet(string content) : base(Guid.NewGuid())
+        {
+            SetContent(content);
+        }
+
+        public void SetContent(string content)
         {
             if (string.IsNullOrWhiteSpace(content))
                 throw new ArgumentException("Tweet cannot be empty.");
-            if (content.Length > 280)
-                throw new ArgumentException("Tweet cannot exceed 280 characters.");
+
+            if (content.Length > MaxContentLength)
+                throw new ArgumentException($"Tweet cannot exceed {MaxContentLength} characters.");
 
             Content = content;
         }
+
+        public void Update(Guid userId, string content)
+        {
+            UserId = userId;
+            SetContent(content);
+        }
+
         public override string DescribeRecord()
         {
             var baseRecord = base.DescribeRecord();
-            return $"{baseRecord}, AuthorId: {AuthorId}, Content: {Content}";
+            return $"{baseRecord}, UserId: {UserId}, Content: {Content}";
+        }
+
+        public bool CanBeLiked()
+        {
+            return !string.IsNullOrWhiteSpace(Content);
         }
     }
-
 }

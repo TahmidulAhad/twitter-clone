@@ -18,5 +18,9 @@
         {
             return $"BaseEntity: Id: {Id}, CreatedAt: {CreatedAt}, ModifiedAt: {ModifiedAt}, CreatedBy: {CreatedBy}, ModifiedBy: {ModifiedBy}";
         }
+        public bool CanBeLiked()
+        {
+            return true;
+        }
     }
 }
