@@ -80,6 +80,8 @@ namespace TwitterClone.Api.Controllers
 
 
         // Patch /api/users/{id}/phoneNumber
+
+        [HttpPatch("{id}/phoneNumber")]
         public IActionResult Updated_PhoneNumber([FromRoute] Guid id, [FromBody] string phoneNumber)
         {
             return Ok(new
