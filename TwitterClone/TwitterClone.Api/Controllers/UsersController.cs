@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TwitterClone.Domain.Entities;
 
@@ -7,6 +8,7 @@ namespace TwitterClone.Api.Controllers
     // api/users
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         // /api/users
@@ -78,7 +80,6 @@ namespace TwitterClone.Api.Controllers
 
 
         // Patch /api/users/{id}/phoneNumber
-        [HttpPatch("{id}/phoneNumber")]
         public IActionResult Updated_PhoneNumber([FromRoute] Guid id, [FromBody] string phoneNumber)
         {
             return Ok(new
