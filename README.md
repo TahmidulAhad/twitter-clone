@@ -1,4 +1,4 @@
-# Twitter Clone - ASP.NET Core
+﻿# Twitter Clone - ASP.NET Core
 
 A Twitter (X)-style backend built step by step with ASP.NET Core as part of an ASP.NET learning course. The project currently focuses on the domain model and the first API controller endpoints.
 
@@ -176,7 +176,7 @@ This is a course project, but feedback and suggestions are welcome!
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+No license file has been added yet.
 
 ---
 
