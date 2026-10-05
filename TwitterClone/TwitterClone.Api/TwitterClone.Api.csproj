@@ -14,8 +14,4 @@
     <ProjectReference Include="..\TwitterClone.Domain\TwitterClone.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\" />
-  </ItemGroup>
-
 </Project>

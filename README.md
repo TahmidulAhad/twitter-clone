@@ -1,81 +1,68 @@
-﻿# 🐦 Twitter Clone — ASP.NET Core
+﻿# Twitter Clone - ASP.NET Core
 
-A **production-style Twitter (X) clone** built step by step using **ASP.NET Core**, following **Clean Architecture** and **Domain-Driven Design (DDD)** principles. This project is part of an ASP.NET learning course and is developed incrementally — each commit represents a new step in the journey.
+A Twitter (X)-style backend built step by step with ASP.NET Core as part of an ASP.NET learning course. The project currently focuses on the domain model and the first API controller endpoints.
 
 ---
 
-## 📌 Project Status
+## Project Status
 
-> 🚧 **Work In Progress** — Built step by step as part of an ASP.NET Core course.
+> Work in progress. Several endpoints are currently demo implementations and do not persist data yet.
 
 | Layer | Status |
 |---|---|
-| Domain Layer | ✅ Completed |
-| Application Layer | 🔜 Coming Soon |
-| Infrastructure Layer | 🔜 Coming Soon |
-| API / Presentation Layer | 🔜 Coming Soon |
-| Authentication (JWT) | 🔜 Coming Soon |
-| Database (EF Core + SQL Server) | 🔜 Coming Soon |
-| Real-time (SignalR) | 🔜 Coming Soon |
+| Domain Layer | In progress: entities and basic business rules are present |
+| API / Presentation Layer | Initial controllers and routes are present |
+| Application Layer | Not started |
+| Infrastructure Layer | Not started |
+| Authentication (JWT) | Route authorization attributes are present; authentication is not configured |
+| Database / Persistence | Not started; responses are in-memory or placeholders |
+| Real-time (SignalR) | Not started |
 
 ---
 
 ## 🏗️ Architecture
 
-This project follows **Clean Architecture** with clearly separated concerns:
+The solution is currently split into a domain project, an ASP.NET Core API project, and a test project. The Application and Infrastructure layers are planned but do not exist yet.
 
 ```
 TwitterClone/
 │
-├── TwitterClone.Domain/          # Core domain entities & business rules
-├── TwitterClone.Application/     # (Coming Soon) Use cases, DTOs, interfaces
-├── TwitterClone.Infrastructure/  # (Coming Soon) EF Core, repositories, external services
-└── TwitterClone.API/             # (Coming Soon) Controllers, Minimal APIs, SignalR Hubs
+├── TwitterClone.Domain/          # Core entities and domain rules
+├── TwitterClone.Api/             # ASP.NET Core controllers and Swagger setup
+└── TwitterClone.Test/            # Early domain experiments/tests
 ```
-
-### Why Clean Architecture?
-- **Independent of frameworks** — business logic does not depend on ASP.NET
-- **Testable** — each layer can be tested in isolation
-- **Maintainable** — clear boundaries make changes easier
 
 ---
 
-## 🧱 Domain Layer — Entities
+## Domain Layer
 
-The domain layer contains the core business entities with **encapsulated logic** and **domain validation**. All properties use `private set` to enforce invariants through constructors and methods.
+The domain project contains entities with encapsulated state, constructors, and validation methods. Shared entity metadata includes `Id` and `CreatedAt`.
 
-### 👤 User
-- `Id` (Guid), `UserName`, `Email`
-- Created via constructor — ensures all required fields are set
+### Current entities and rules
 
-### 🐦 Tweet
-- `Id`, `AuthorId`, `Content`
-- ✅ Content **cannot be empty**
-- ✅ Content **cannot exceed 280 characters**
-- Validation lives inside the domain — not in the controller
+- `User`: first name, last name, email, follow/unfollow and notification tracking
+- `Tweet`: author, content, and `CanBeLiked()`; content cannot be empty or exceed **200 characters**
+- `Follow`: prevents a user from following themselves
+- `Like`: connects a user and a tweet
+- `Bookmark`: connects a user and a saved tweet
+- `Retweet`: connects a user and a tweet, with an optional comment up to 280 characters
+- `Message`: prevents self-messaging, rejects empty content, and supports marking as read
+- `Notification` and notification subclasses: unread state, message validation, and mark-as-read behavior
 
-### 🔁 Follow
-- `FollowerId`, `FollowingId`, `FollowedAt`
-- ✅ **A user cannot follow themselves** (enforced in domain)
+## API Progress
 
-### ❤️ Like
-- Tracks which user liked which tweet
+The API project targets .NET 8 and currently includes these controller areas:
 
-### 🔖 Bookmark
-- Tracks saved tweets per user
+- `Users`: list, create, read by ID, and update demo endpoints
+- `Tweets`: sample tweet listing endpoint
+- `Follows`: follow, unfollow, follower/following, request, and status routes
+- `Likes`: like, unlike, status, count, and liked-tweets routes
+- `Bookmarks`: add, remove, clear, list, and status routes
+- `Retweets`: create, list, delete, and status routes
+- `Messages`: send, list, read, delete, and mark-as-read routes
+- `Notifications`: list, unread, read, delete, and mark-all-as-read routes
 
-### 🔃 Retweet
-- Tracks retweet relationships
-
-### 💬 Message (Direct Message)
-- `SenderId`, `ReceiverId`, `Content`, `SentAt`
-- ✅ **Sender and receiver cannot be the same**
-- ✅ **Content cannot be empty**
-
-### 🔔 Notification
-- `UserId`, `Message`, `IsRead`, `CreatedAt`
-- ✅ Starts as unread (`IsRead = false`)
-- ✅ `MarkAsRead()` method to update state
+Swagger/OpenAPI is enabled in the Development environment. Most controller actions currently return sample messages, empty responses, or placeholder values because repositories, services, and persistence have not been added yet.
 
 ---
 
@@ -86,12 +73,11 @@ The domain layer contains the core business entities with **encapsulated logic**
 | **ASP.NET Core 8** | Web framework |
 | **C# 12** | Programming language |
 | **.NET 8** | Runtime |
-| **Entity Framework Core** | ORM (coming soon) |
-| **SQL Server** | Database (coming soon) |
-| **JWT Bearer Auth** | Authentication (coming soon) |
-| **SignalR** | Real-time messaging (coming soon) |
-| **Clean Architecture** | Project structure |
-| **Domain-Driven Design** | Domain modeling |
+| **Entity Framework Core** | Planned persistence layer |
+| **SQL Server** | Planned database |
+| **JWT Bearer Auth** | Planned authentication |
+| **SignalR** | Planned real-time messaging |
+| **Domain-Driven Design** | Current domain modeling approach |
 
 ---
 
@@ -101,7 +87,6 @@ The domain layer contains the core business entities with **encapsulated logic**
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) or [VS Code](https://code.visualstudio.com/) with C# extension
-- SQL Server (coming soon)
 
 ### Clone the Repository
 
@@ -119,11 +104,11 @@ dotnet build
 
 ### Run the Project
 
-> ⚠️ The API layer is not yet added. Currently only the Domain layer exists.
-
 ```bash
-dotnet run --project TwitterClone.API   # Available after API layer is added
+dotnet run --project TwitterClone.Api
 ```
+
+When running in Development, open the Swagger URL printed by ASP.NET Core to inspect the available routes.
 
 ---
 
@@ -133,8 +118,10 @@ Each commit in this repo represents a learning step:
 
 | Step | What Was Built |
 |---|---|
-| Step 1 | Solution setup + Domain layer created |
-| Step 2 | *(Coming next...)* |
+| Step 1 | Solution setup and Domain project created |
+| Step 2 | ASP.NET Core API project and Swagger configured |
+| Step 3 | Initial domain entities and validation rules added |
+| Step 4 | Controller route skeletons added for users, tweets, follows, likes, bookmarks, retweets, messages, and notifications |
 
 ---
 
@@ -142,33 +129,33 @@ Each commit in this repo represents a learning step:
 
 ```
 twitter-clone/
-├── .gitignore
 ├── README.md
 └── TwitterClone/
     ├── TwitterClone.slnx
-    └── TwitterClone.Domain/
-        ├── User.cs
-        ├── Tweet.cs
-        ├── Follow.cs
-        ├── Like.cs
-        ├── Bookmark.cs
-        ├── Retweet.cs
-        ├── Message.cs
-        ├── Notification.cs
-        └── TwitterClone.Domain.csproj
+    ├── TwitterClone.Api/
+    │   ├── Controllers/
+    │   ├── Program.cs
+    │   └── TwitterClone.Api.csproj
+    ├── TwitterClone.Domain/
+    │   ├── Entities/
+    │   └── TwitterClone.Domain.csproj
+    └── TwitterClone.Test/
+        └── Class10.cs
 ```
 
 ---
 
 ## 🎯 Planned Features
 
-- [ ] User Registration & Login (JWT Authentication)
-- [ ] Post Tweets (max 280 characters)
-- [ ] Like, Retweet, and Bookmark tweets
-- [ ] Follow / Unfollow users
-- [ ] User Feed (tweets from followed users)
-- [ ] Direct Messages (DMs)
-- [ ] Real-time Notifications (SignalR)
+- [ ] Add Application and Infrastructure projects
+- [ ] Add DTOs, services, repositories, and dependency injection
+- [ ] Add Entity Framework Core and SQL Server persistence
+- [ ] Implement real user registration and JWT authentication
+- [ ] Implement persisted tweets, likes, retweets, bookmarks, and follows
+- [ ] Build a user feed from followed users
+- [ ] Connect direct messages and notifications to persisted data
+- [ ] Add automated unit and integration tests
+- [ ] Add real-time notifications with SignalR
 - [ ] Search users and tweets
 - [ ] User profile with bio & profile picture
 - [ ] Trending hashtags
@@ -195,7 +182,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ## 👨‍💻 Author
 
-**Tahmidul Ahad**
+**Md. Tahmidul Alam Ahad**
 📫 Reach me on [GitHub](https://github.com/TahmidulAhad)
 
 ---
