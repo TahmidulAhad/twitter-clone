@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Twitter Clone - ASP.NET Core
+=======
+﻿# Twitter Clone - ASP.NET Core
+>>>>>>> 0b2fbb7 (Add User and Tweet controllers with CRUD support)
 
 A Twitter (X)-style backend built step by step with ASP.NET Core as part of an ASP.NET learning course. The project currently focuses on the domain model and the first API controller endpoints.
 

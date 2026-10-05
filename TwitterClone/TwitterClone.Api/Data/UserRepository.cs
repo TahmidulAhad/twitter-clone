@@ -1,0 +1,46 @@
+﻿using TwitterClone.Domain.Entities;
+
+namespace TwitterClone.Api.Data
+{
+    public class UserRepository
+    {
+        private readonly List<User> _users = new List<User>();
+        public User AddUser(User user)
+        {
+            _users.Add(user);
+            return user;
+        }
+
+        public User UpdateUser(User user)
+        {
+            _users.RemoveAll(u => u.Id == user.Id);
+            _users.Add(user);
+            return user;
+        }
+
+        public bool DeleteUser(User user)
+        {
+            return _users.Remove(user);
+        }
+
+        public User? GetUserById(Guid id)
+        {
+            return _users.SingleOrDefault(u => u.Id == id);
+        }
+
+        public List<User> GetAllUsers()
+        {
+            return _users;
+        }
+
+        public User? GetUserByEmail(string email)
+        {
+            return _users.SingleOrDefault(u => u.Email == email);
+        }
+
+        internal object GetUserById(object userId)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
