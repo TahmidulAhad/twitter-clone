@@ -176,7 +176,7 @@ This is a course project, but feedback and suggestions are welcome!
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+No license file has been added yet.
 
 ---
 
