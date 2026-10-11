@@ -1,13 +1,17 @@
-﻿using TwitterClone.Domain.Entities;
+﻿using TwitterClone.Application.Interfaces;
+using TwitterClone.Domain.Entities;
 
-namespace TwitterClone.Api.Data
+namespace TwitterClone.Infrastructure.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
+
         private readonly List<User> _users = new List<User>();
+
         public User AddUser(User user)
         {
             _users.Add(user);
+
             return user;
         }
 
@@ -28,19 +32,15 @@ namespace TwitterClone.Api.Data
             return _users.SingleOrDefault(u => u.Id == id);
         }
 
-        public List<User> GetAllUsers()
+        public List<User> GetUsers()
         {
-            return _users;
+            return _users.ToList();
         }
 
         public User? GetUserByEmail(string email)
         {
-            return _users.SingleOrDefault(u => u.Email == email);
-        }
-
-        internal object GetUserById(object userId)
-        {
-            throw new NotImplementedException();
+            return _users.SingleOrDefault(u =>
+                string.Equals(u.Email, email.Trim(), StringComparison.OrdinalIgnoreCase));
         }
     }
 }
