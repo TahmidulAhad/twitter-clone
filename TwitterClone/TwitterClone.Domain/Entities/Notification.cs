@@ -2,39 +2,45 @@
 {
     public abstract class Notification : BaseEntity
     {
-        public Guid UserId { get; private set; }
-        public string? Type { get; private set; }
-        public string? Message { get; protected set; }
-        public bool IsRead { get; private set; }
+        private Guid _userId;
+        private string _type;
+        private string _message;
+        private bool _isRead;
+
 
         public Notification(string notificationType) : base(Guid.NewGuid())
         {
-            Type = notificationType;
-            IsRead = false;
+            _type = notificationType;
         }
 
-        protected Notification(Guid userId) : base(Guid.NewGuid())
+
+        public Guid UserId
         {
-            UserId = userId;
-            Message = string.Empty;
-            IsRead = false;
+            get { return _userId; }
+            set { _userId = value; }
         }
 
-        public void SetMessage(string message)
+        public string Type
         {
-            if (string.IsNullOrWhiteSpace(message))
-                throw new ArgumentException("Notification message cannot be empty.");
-            Message = message;
-        }
-        public void MarkAsRead()
-        {
-            IsRead = true;
+            get { return _type; }
+            set { _type = value; }
         }
 
-        public override string DescribeRecord()
+        protected string Message
         {
-            var baseRecord = base.DescribeRecord();
-            return $"{baseRecord}, UserId: {UserId}, Message: {Message}, IsRead: {IsRead}";
+            get { return _message; }
+            set { _message = value; }
+        }
+
+        public bool IsRead
+        {
+            get { return _isRead; }
+            set { _isRead = value; }
+        }
+
+        public string GetNotificationInfo()
+        {
+            return $"UserId: {_userId}, NotificationType: {_type}";
         }
 
         public abstract string GetMessage();

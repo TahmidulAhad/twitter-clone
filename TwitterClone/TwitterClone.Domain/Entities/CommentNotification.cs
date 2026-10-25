@@ -1,30 +1,34 @@
-﻿namespace TwitterClone.Domain.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TwitterClone.Domain.Entities
 {
     public sealed class CommentNotification : Notification
     {
-        public Guid CommenterId { get; private set; }
-        public Guid TweetId { get; private set; }
-
-        public CommentNotification(Guid commenterId, Guid tweetId) : base("Comment")
+        public CommentNotification(Guid commentByUserId) : base("Comment")
         {
-            if (commenterId == Guid.Empty)
-                throw new ArgumentException("CommenterId cannot be empty.", nameof(commenterId));
+            CommentByUserId = commentByUserId;
+        }
 
-            if (tweetId == Guid.Empty)
-                throw new ArgumentException("TweetId cannot be empty.", nameof(tweetId));
+        public Guid CommentByUserId { get; set; }
 
-            CommenterId = commenterId;
-            TweetId = tweetId;
+        public void AddMessage(string message)
+        {
+            Message = message;
         }
 
         public override string DescribeRecord()
         {
-            return $"{base.DescribeRecord()}, CommenterId: {CommenterId}, TweetId: {TweetId}";
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, CommentByUserId: {CommentByUserId}";
         }
 
         public override string GetMessage()
         {
-            return $"User with ID {CommenterId} commented on your tweet with ID {TweetId}.";
+            return $"User with ID {CommentByUserId} commented on your post.";
         }
     }
 }

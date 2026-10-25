@@ -1,27 +1,31 @@
-﻿namespace TwitterClone.Domain.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TwitterClone.Domain.Entities
 {
     public sealed class LikeNotification : Notification
     {
-        public LikeNotification(Guid likerId, Guid tweetId) : base("Like")
-        {
-            if (likerId == Guid.Empty)
-                throw new ArgumentException("LikerId cannot be empty.");
 
-            LikerId = likerId;
-            TweetId = tweetId;
+        public LikeNotification(Guid likeByUserId) : base("Like")
+        {
+            LikeByUserId = likeByUserId;
         }
 
-        public Guid LikerId { get; private set; }
-        public Guid TweetId { get; private set; }
+        public Guid LikeByUserId { get; set; }
 
-        public override string DescribeRecord()
+        public void AddMessage(string message)
         {
-            return $"{base.DescribeRecord()}, LikerId: {LikerId}, TweetId: {TweetId}";
+            Message = message;
         }
+
+
 
         public override string GetMessage()
         {
-            return $"User with ID {LikerId} liked your tweet with ID {TweetId}.";
+            return $"User with ID {LikeByUserId} liked your post.";
         }
     }
 }
