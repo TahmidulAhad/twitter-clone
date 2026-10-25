@@ -2,37 +2,51 @@
 {
     public class Message : BaseEntity
     {
-        public Guid SenderId { get; private set; }
-        public Guid ReceiverId { get; private set; }
-        public string Content { get; private set; }
-        public bool IsRead { get; private set; }
+        private Guid _senderId;
+        private Guid _receiverId;
+        private string _content;
+        private DateTime _sentAt;
+        private bool _isRead;
 
-        public Message(Guid senderId, Guid receiverId, string content) : base(Guid.NewGuid())
+        public Message() : base(Guid.NewGuid())
         {
-            if (senderId == receiverId)
-                throw new ArgumentException("Sender and receiver cannot be the same.");
 
-            SenderId = senderId;
-            ReceiverId = receiverId;
-            SetContent(content);
-            IsRead = false;
         }
 
-        public void SetContent(string content)
+        public Guid SenderId
         {
-            if (string.IsNullOrWhiteSpace(content))
-                throw new ArgumentException("Message cannot be empty.");
+            get { return _senderId; }
+            set { _senderId = value; }
+        }
 
-            Content = content;
-        }
-        public void MarkAsRead()
+        public Guid ReceiverId
         {
-            IsRead = true;
+            get { return _receiverId; }
+            set { _receiverId = value; }
         }
+
+        public string Content
+        {
+            get { return _content; }
+            set { _content = value; }
+        }
+
+        public DateTime SentAt
+        {
+            get { return _sentAt; }
+            set { _sentAt = value; }
+        }
+
+        public bool IsRead
+        {
+            get { return _isRead; }
+            set { _isRead = value; }
+        }
+
         public override string DescribeRecord()
         {
             var baseRecord = base.DescribeRecord();
-            return $"{baseRecord}, SenderId: {SenderId}, ReceiverId: {ReceiverId}, Content: {Content}, IsRead: {IsRead}";
+            return $"{baseRecord}, SenderId: {SenderId}, ReceiverId: {ReceiverId}, Content: {Content}, SentAt: {SentAt}, IsRead: {IsRead}";
         }
     }
 }
