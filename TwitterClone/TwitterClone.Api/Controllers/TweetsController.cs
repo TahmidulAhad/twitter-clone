@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TwitterClone.Application.Dtos;
+using TwitterClone.Application.Generics;
 using TwitterClone.Application.Interfaces;
 
 namespace TwitterClone.Api.Controllers
@@ -36,10 +37,20 @@ namespace TwitterClone.Api.Controllers
 
             if (tweet == null)
             {
-                return NotFound();
+                return NotFound(new ApiResponse<TweetDto>
+                {
+                    Success = false,
+                    Message = "Tweet not found",
+                    Data = null
+                });
             }
 
-            return Ok(tweet);
+            return Ok(new ApiResponse<TweetDto>
+            {
+                Success = true,
+                Message = "Tweet retrieved successfully",
+                Data = tweet
+            });
         }
 
         // POST /api/tweets
