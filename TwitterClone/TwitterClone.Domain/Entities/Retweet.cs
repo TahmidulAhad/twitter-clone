@@ -2,26 +2,31 @@ namespace TwitterClone.Domain.Entities
 {
     public class Retweet : BaseEntity
     {
-        public Guid UserId { get; private set; }
-        public Guid TweetId { get; private set; }
-        public string? Comment { get; private set; }
+        private Guid _userId;
+        private Guid _tweetId;
+        private string _comment;
 
-        public Retweet(Guid userId, Guid tweetId, string? comment = null) : base(Guid.NewGuid())
+        public Retweet() : base(Guid.NewGuid())
         {
-            UserId = userId;
-            TweetId = tweetId;
-            SetComment(comment);
+
         }
 
-        private void SetComment(string? comment)
+        public Guid UserId
         {
-            if (string.IsNullOrWhiteSpace(comment))
-                return;
+            get { return _userId; }
+            set { _userId = value; }
+        }
 
-            if (comment.Length > 280)
-                throw new ArgumentException("Comment cannot exceed 280 characters.");
+        public Guid TweetId
+        {
+            get { return _tweetId; }
+            set { _tweetId = value; }
+        }
 
-            Comment = comment;
+        public string Comment
+        {
+            get { return _comment; }
+            set { _comment = value; }
         }
 
         public override string DescribeRecord()

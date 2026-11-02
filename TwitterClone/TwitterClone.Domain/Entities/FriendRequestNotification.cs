@@ -1,19 +1,24 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace TwitterClone.Domain.Entities
 {
     public sealed class FriendRequestNotification : Notification
     {
-        public FriendRequestNotification(Guid recipientUserId, Guid requestedByUserId) : base(recipientUserId)
+        public FriendRequestNotification(Guid requestedByUserId) : base("FriendRequest")
         {
-            if (recipientUserId == Guid.Empty)
-                throw new ArgumentException("RecipientUserId cannot be empty.");
-            if (requestedByUserId == Guid.Empty)
-                throw new ArgumentException("RequestedByUserId cannot be empty.");
-
             RequestedByUserId = requestedByUserId;
-            SetMessage($"User {requestedByUserId} sent you a friend request.");
         }
 
-        public Guid RequestedByUserId { get; private set; }
+        public Guid RequestedByUserId { get; set; }
+
+        public void AddMessage(string message)
+        {
+            Message = message;
+        }
 
         public override string DescribeRecord()
         {

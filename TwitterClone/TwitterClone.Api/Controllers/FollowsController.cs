@@ -1,168 +1,93 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using TwitterClone.Application.Dtos;
+using TwitterClone.Application.Interfaces;
 
 namespace TwitterClone.Api.Controllers
 {
-    // /api/follows
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class FollowsController : ControllerBase
     {
-        // POST: /api/follows/{userId}
-        [HttpPost("{userId}")]
-        public IActionResult FollowUser(Guid userId)
+
+        private readonly IFollowService _followService;
+
+        public FollowsController(
+            IFollowService followService)
         {
-            return Ok(new
+            _followService = followService;
+        }
+
+
+        // GET /api/follows?followerId={followerId}&followingId={followingId}
+        [HttpGet]
+        [ProducesResponseType(typeof(List<FollowDto>), StatusCodes.Status200OK)]
+        public IActionResult GetFollows([FromQuery] Guid? followerId, [FromQuery] Guid? followingId)
+        {
+            return Ok(_followService.GetFollows(followerId, followingId));
+        }
+
+        // GET /api/follows/{id}
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(FollowDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetFollowById([FromRoute] Guid id)
+        {
+            var follow = _followService.GetFollowById(id);
+
+            if (follow == null)
             {
-                message = "Followed user successfully"
-            });
+                return NotFound();
+            }
+
+            return Ok(follow);
         }
 
-
-        // DELETE: /api/follows/{userId}
-        [HttpDelete("{userId}")]
-        public IActionResult UnfollowUser(Guid userId)
+        // GET /api/follows/followers/{userId}
+        [HttpGet("followers/{userId}")]
+        [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
+        public IActionResult GetFollowers([FromRoute] Guid userId)
         {
-            return NoContent();
+            return Ok(_followService.GetFollowers(userId));
         }
 
-
-        // GET: /api/follows/{userId}/followers
-        [HttpGet("{userId}/followers")]
-        public IActionResult GetFollowers(Guid userId)
+        // GET /api/follows/following/{userId}
+        [HttpGet("following/{userId}")]
+        [ProducesResponseType(typeof(List<UserDto>), StatusCodes.Status200OK)]
+        public IActionResult GetFollowing([FromRoute] Guid userId)
         {
-            return Ok(new
+            return Ok(_followService.GetFollowing(userId));
+        }
+
+        // POST /api/follows
+        [HttpPost]
+        [ProducesResponseType(typeof(FollowDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CreateFollow([FromBody] CreateFollowDto createFollowDto)
+        {
+            var createdFollow = _followService.CreateFollow(createFollowDto);
+
+            if (createdFollow == null)
             {
-                message = "Retrieved followers successfully"
-            });
+                return BadRequest("Both users must exist, and a user cannot follow themselves.");
+            }
+
+            return CreatedAtAction(nameof(GetFollowById), new { id = createdFollow.Id }, createdFollow);
         }
 
-
-        // GET: /api/follows/{userId}/following
-        [HttpGet("{userId}/following")]
-        public IActionResult GetFollowing(Guid userId)
+        // DELETE /api/follows/{id}
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteFollow([FromRoute] Guid id)
         {
-            return Ok();
-        }
+            var isDeleted = _followService.DeleteFollow(id);
 
+            if (isDeleted == false)
+            {
+                return NotFound();
+            }
 
-        // GET: /api/follows/{userId}/status/{targetUserId}
-        [HttpGet("{userId}/status/{targetUserId}")]
-        public IActionResult GetFollowStatus(Guid userId, Guid targetUserId)
-        {
-            return Ok();
-        }
-
-
-        // GET: /api/follows/{userId}/follower-counts
-        [HttpGet("{userId}/follower-counts")]
-        public IActionResult GetFollowerCounts(Guid userId)
-        {
-            return Ok();
-        }
-
-
-        // GET: /api/follows/{userId}/following-counts
-        [HttpGet("{userId}/following-counts")]
-        public IActionResult GetFollowingCounts(Guid userId)
-        {
-            return Ok();
-        }
-
-
-        // GET: /api/follows/{userId}/mutual-follows/{targetUserId}
-        [HttpGet("{userId}/mutual-follows/{targetUserId}")]
-        public IActionResult GetMutualFollows(Guid userId, Guid targetUserId)
-        {
-            return Ok();
-        }
-
-
-        // GET: /api/follows/{userId}/suggested-follows
-        [HttpGet("{userId}/suggested-follows")]
-        public IActionResult GetSuggestedFollows(Guid userId)
-        {
-            return Ok();
-        }
-
-
-        // POST: /api/follows/{userId}/follow-requests/{targetUserId}
-        [HttpPost("{userId}/follow-requests/{targetUserId}")]
-        public IActionResult PostFollowRequest(Guid userId, Guid targetUserId)
-        {
-            return Ok();
-        }
-
-        // GET: /api/follows/{userId}/follow-requests
-        [HttpGet("{userId}/follow-requests")]
-        public IActionResult GetFollowRequests(Guid userId)
-        {
-            return Ok();
-        }
-
-
-        // GET: /api/follows/{userId}/follow-requests/count
-        [HttpGet("{userId}/follow-requests/count")]
-        public IActionResult GetFollowRequestsCount(Guid userId)
-        {
-            return Ok();
-        }
-
-
-        // POST: /api/follows/{userId}/accept-follow-request/{requesterId}
-        [HttpPost("{userId}/accept-follow-request/{requesterId}")]
-        public IActionResult AcceptFollowRequest(Guid userId, Guid requesterId)
-        {
-            return Ok();
-        }
-
-
-        // POST: /api/follows/{userId}/decline-follow-request/{requesterId}
-        [HttpPost("{userId}/decline-follow-request/{requesterId}")]
-        public IActionResult DeclineFollowRequest(Guid userId, Guid requesterId)
-        {
-            return Ok();
-        }
-
-
-        // POST: /api/follows/{userId}/block/{targetUserId}
-        [HttpPost("{userId}/block/{targetUserId}")]
-        public IActionResult BlockUser(Guid userId, Guid targetUserId)
-        {
-            return Ok();
-        }
-
-
-        // DELETE: /api/follows/{userId}/unblock/{targetUserId}
-        [HttpDelete("{userId}/unblock/{targetUserId}")]
-        public IActionResult UnblockUser(Guid userId, Guid targetUserId)
-        {
             return NoContent();
-        }
-
-
-        // GET: /api/follows/{userId}/blocked-users
-        [HttpGet("{userId}/blocked-users")]
-        public IActionResult GetBlockedUsers(Guid userId)
-        {
-            return Ok();
-        }
-
-
-        // GET: /api/follows/{userId}/blocked-users/count
-        [HttpGet("{userId}/blocked-users/count")]
-        public IActionResult GetBlockedUsersCount(Guid userId)
-        {
-            return Ok();
-        }
-
-        // GET: /api/follows/{userId}/blocked-users/status/{targetUserId}
-        [HttpGet("{userId}/blocked-users/status/{targetUserId}")]
-        public IActionResult GetBlockedUsersStatus(Guid userId, Guid targetUserId)
-        {
-            return Ok();
         }
     }
 }

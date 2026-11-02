@@ -8,22 +8,23 @@ namespace TwitterClone.Domain.Entities
 {
     public class MentionNotification : Notification
     {
-        public MentionNotification(Guid mentionerId, Guid tweetId) : base("Mention")
+        public MentionNotification(Guid mentionedByUserId) : base("Mention")
         {
-            if (mentionerId == Guid.Empty)
-                throw new ArgumentException("MentionerId cannot be empty.");
-            MentionerId = mentionerId;
-            TweetId = tweetId;
+            MentionedByUserId = mentionedByUserId;
         }
-        public Guid MentionerId { get; private set; }
-        public Guid TweetId { get; private set; }
+        public Guid MentionedByUserId { get; set; }
+
+
         public override string DescribeRecord()
         {
-            return $"{base.DescribeRecord()}, MentionerId: {MentionerId}, TweetId: {TweetId}";
+            var baseRecord = base.DescribeRecord();
+            return $"{baseRecord}, MentionedByUserId: {MentionedByUserId}";
         }
+
         public override string GetMessage()
         {
-            return $"User with ID {MentionerId} mentioned you in a tweet with ID {TweetId}.";
+            return $"User with ID {MentionedByUserId} mentioned you in a post.";
         }
+
     }
 }
