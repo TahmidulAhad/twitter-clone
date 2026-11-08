@@ -4,6 +4,8 @@ namespace TwitterClone.Domain.Entities
     {
         public Guid UserId { get; private set; }
         public string Content { get; private set; } = string.Empty;
+        public int Likes { get; private set; } = 0;
+        public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
         public static int MaxContentLength = 200;
 
         public Tweet(Guid userId, string content) : base(Guid.NewGuid())
@@ -34,10 +36,16 @@ namespace TwitterClone.Domain.Entities
             SetContent(content);
         }
 
+        public void Like() => Likes++;
+
+        public void Unlike()
+        {
+            if (Likes > 0) Likes--;
+        }
         public override string DescribeRecord()
         {
             var baseRecord = base.DescribeRecord();
-            return $"{baseRecord}, UserId: {UserId}, Content: {Content}";
+            return $"{baseRecord}, UserId: {UserId}, Content: {Content},  Likes: {Likes}, CreatedAt: {CreatedAt}";
         }
 
         public bool CanBeLiked()
